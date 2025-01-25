@@ -2,6 +2,7 @@ use std::fs::File;
 use std::io::prelude::*;
 use std::io::BufReader;
 use std::path::Path;
+use regex::Regex;
 
 fn main() {
     let path1 = Path::new("./src/input/input3.txt");
@@ -25,23 +26,69 @@ fn part1(path: &Path) -> String {
     let reader = BufReader::new(file);
     let lines = reader.lines();
 
-    // IDEA: Make a while loop over each line with a custom index
-    // Create a utility function to check if querying an index is out of bounds
-    // Create a state machine that does the parsing and transitions into the correct
-    // states and do the correct action, if it fails, it remains on the same index and
-    // starts over. Loop over each line and let state machine handle each line. Put 
-    // the state machine in start state and feed it a line. Then call begin. It will go
-    // until the end of the line and then arive in finished state and output the total value
-    // for that line. Begin has a loop that calls execute on the given state and checks if the
-    // state is not finished. SOMETHING LIKE THIS.
+    let mut valid_expressions: Vec<String> = Vec::new();
+    let mut multiplications: Vec<i32> = Vec::new();
 
-    for (_, line) in lines.enumerate() {
+    let re_expression = Regex::new(r"mul\(\d{1,3},\d{1,3}\)").unwrap();
+    let re_digits = Regex::new(r"\d+").unwrap();
+
+    for line in lines.into_iter() {
         let line = line.unwrap();
+
+        let mut expressions: Vec<String> = re_expression.find_iter(&line).map(|m| m.as_str().to_string()).collect();
+
+        valid_expressions.append(&mut expressions);
     }
 
-    "Hello".to_string()
+    for exp in valid_expressions.iter() {
+        let digits: Vec<i32> = re_digits.find_iter(exp).map(|m| m.as_str().parse::<i32>().unwrap()).collect();
+
+        assert!(digits.len() == 2);
+        multiplications.push(digits[0]*digits[1]);
+    }
+
+    multiplications.iter().sum::<i32>().to_string()
 }
 
 fn part2(path: &Path) -> String {
-    "Hello".to_string()
+    let display = path.display();
+    let file = match File::open(&path) {
+        Err(_) => panic!("couldn't open {}", display),
+        Ok(file) => file,
+    };
+
+    let reader = BufReader::new(file);
+    let lines = reader.lines();
+
+    let mut valid_expressions: Vec<String> = Vec::new();
+    let mut multiplications: Vec<i32> = Vec::new();
+
+    let re_expression = Regex::new(r"(mul\(\d{1,3},\d{1,3}\))|(do\(\))|(don't\(\))").unwrap();
+    let re_digits = Regex::new(r"\d+").unwrap();
+
+    for line in lines.into_iter() {
+        let line = line.unwrap();
+
+        let mut expressions: Vec<String> = re_expression.find_iter(&line).map(|m| m.as_str().to_string()).collect();
+
+        valid_expressions.append(&mut expressions);
+    }
+
+    let mut enabled = true;
+    for exp in valid_expressions.iter() {
+        if exp == "do()" {
+            enabled = true;
+        } else if exp == "don't()" {
+            enabled = false;
+        } else {
+            if enabled {
+                let digits: Vec<i32> = re_digits.find_iter(exp).map(|m| m.as_str().parse::<i32>().unwrap()).collect();
+
+                assert!(digits.len() == 2);
+                multiplications.push(digits[0]*digits[1]);
+            }
+        }
+    }
+
+    multiplications.iter().sum::<i32>().to_string()
 }
