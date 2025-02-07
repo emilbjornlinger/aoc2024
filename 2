@@ -235,114 +235,22 @@ fn part1(path: &Path) -> String {
 }
 
 fn part2(path: &Path) -> String {
-    let display = path.display();
-    let file = match File::open(&path) {
-        Err(_) => panic!("couldn't open {}", display),
-        Ok(file) => file,
-    };
-
-    let reader = BufReader::new(file);
-    let lines = reader.lines();
-
-    let mut char_grid: Vec::<Vec::<char>> = Vec::new();
-
-    for line in lines.into_iter() {
-        let line = line.unwrap();
-
-        let chars: Vec<char> = line.chars().collect();
-
-        char_grid.push(chars);
-    }
-
-    let rows = char_grid.len();
-    let cols = char_grid[0].len();
-
-    let mut total_matches = 0;
-
-    for row in 0..rows {
-        if row + 2 >= rows {
-            break;
-        }
-
-        for col in 0..cols {
-            if col + 2 >= cols {
-                break;
-            }
-            
-            let mut query: Vec<Vec<char>> = Vec::new();
-
-            for i in 0..3 {
-                let mut row_of_char = Vec::new();
-
-                for j in 0..3 {
-                    row_of_char.push(char_grid[row + i][col + j]);
-                }
-
-                query.push(row_of_char);
-            }
-
-            // print!("\n");
-            // for i in 0..3 {
-            //     for j in 0..3 {
-            //         print!("{}, ", query[i][j]);
-            //     }
-            //     print!("\n");
-            // }
-
-            if is_match(&query) {
-                total_matches += 1;
-            }
-        }
-    }
-
-    total_matches.to_string()
+    "Hello".to_string()
 }
 
 fn is_match(query: &Vec<Vec<char>>) -> bool {
     assert_eq!(query.len(), 3);
     assert_eq!(query[0].len(), 3);
 
-    let mut result = false;
-
     let poss_1: Vec<Vec<char>> = vec![vec!['M', '_', 'S'], 
                                       vec!['_', 'A', '_'], 
                                       vec!['M', '_', 'S']];
 
-    let poss_2: Vec<Vec<char>> = vec![vec!['S', '_', 'S'], 
+    let poss_2: Vec<Vec<char>> = vec![vec!['M', '_', 'S'], 
                                       vec!['_', 'A', '_'], 
-                                      vec!['M', '_', 'M']];
+                                      vec!['M', '_', 'S']];
 
-    let poss_3: Vec<Vec<char>> = vec![vec!['M', '_', 'M'], 
-                                      vec!['_', 'A', '_'], 
-                                      vec!['S', '_', 'S']];
+    if 
 
-    let poss_4: Vec<Vec<char>> = vec![vec!['S', '_', 'M'], 
-                                      vec!['_', 'A', '_'], 
-                                      vec!['S', '_', 'M']];
-
-    let possibilites = vec![poss_1, poss_2, poss_3, poss_4];
-    for poss in possibilites.iter() {
-        if pattern_match(poss, query) {
-            result = true;
-        }
-    }
-
-    result
-}
-
-fn pattern_match(pattern: &Vec<Vec<char>>, query: &Vec<Vec<char>>) -> bool {
-    let mut result = true;
-    for (row_idx, row) in pattern.iter().enumerate() {
-        for (col_idx, ch) in row.iter().enumerate() {
-            if *ch == '_' {
-                continue;
-            } 
-
-            if *ch != query[row_idx][col_idx] {
-                result = false;
-            }
-        }
-    }
-
-    result
+    true
 }
