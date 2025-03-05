@@ -5,7 +5,10 @@ use std::path::Path;
 use std::collections::HashSet;
 use regex::Regex;
 
+use aoc_lib;
+
 fn main() {
+    println!("{}", aoc_lib::info());
     let path1 = Path::new("./src/input/input5.txt");
 
     let output1 = part1(&path1);

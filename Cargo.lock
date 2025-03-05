@@ -15,8 +15,14 @@ dependencies = [
 name = "aoc2024"
 version = "0.1.0"
 dependencies = [
+ "aoc_lib",
  "regex",
 ]
+
+[[package]]
+name = "aoc_lib"
+version = "0.1.0"
+source = "git+https://github.com/emilbjornlinger/aoc_lib#19e7e2ef4ad69c71e41a40a3a2d5488c27678402"
 
 [[package]]
 name = "memchr"
