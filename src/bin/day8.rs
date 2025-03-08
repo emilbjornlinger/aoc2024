@@ -3,8 +3,7 @@ use std::fs::File;
 use std::io::prelude::*;
 use std::io::BufReader;
 use std::path::Path;
-
-use aoc_lib;
+use aoc_lib::combination;
 
 #[derive(Eq, Hash, PartialEq)]
 struct Position {
@@ -80,7 +79,7 @@ fn part1(path: &Path) -> String {
     let mut set_of_antinodes = HashSet::<Position>::new();
 
     for symbol_positions in positions.into_iter() {
-        for pair in unordered_pairs(&symbol_positions).iter() {
+        for pair in combination::unordered_pairs(&symbol_positions).iter() {
             let x_step = pair.0.x - pair.1.x;
             let y_step = pair.0.y - pair.1.y;
 
@@ -169,7 +168,7 @@ fn part2(path: &Path) -> String {
     let mut set_of_antinodes = HashSet::<Position>::new();
 
     for symbol_positions in positions.into_iter() {
-        for pair in unordered_pairs(&symbol_positions).iter() {
+        for pair in combination::unordered_pairs(&symbol_positions).iter() {
             // Calculate steps
             let x_step = pair.0.x - pair.1.x;
             let y_step = pair.0.y - pair.1.y;
@@ -219,16 +218,4 @@ fn part2(path: &Path) -> String {
     }
 
     set_of_antinodes.len().to_string()
-}
-
-fn unordered_pairs<T>(values: &Vec<T>) -> Vec<(&T, &T)> {
-    let mut created_pairs = Vec::new();
-
-    for (idx, first_val) in values.iter().enumerate() {
-        for second_val in values[idx + 1..].iter() {
-            created_pairs.push((first_val, second_val));
-        }
-    }
-
-    created_pairs
 }

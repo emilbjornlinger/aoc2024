@@ -23,7 +23,7 @@ dependencies = [
 [[package]]
 name = "aoc_lib"
 version = "0.1.0"
-source = "git+https://github.com/emilbjornlinger/aoc_lib#0c04cf021d9bd5a4a368d49ba39ea78cdab95016"
+source = "git+https://github.com/emilbjornlinger/aoc_lib#e290f136397794eb59186be2580f194d622a3544"
 
 [[package]]
 name = "bitvec"
